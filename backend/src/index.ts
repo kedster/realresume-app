@@ -12,30 +12,56 @@
  */
 
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
+	async fetch(request: Request, env: Env, ctx: ExecutionContext) {
 		const url = new URL(request.url);
 
-		// POST /api/resumes
-		if (url.pathname === '/api/resumes' && request.method === 'POST') {
-			// Example: parse JSON body and save to D1
-			const data = await request.formData();
-			const title = data.get('title');
-			// You'd also handle file upload here if needed (see Cloudflare docs for file handling)
-			// Example: Save to D1 (pseudo-code)
-			// await env.DB.prepare('INSERT INTO resumes (title) VALUES (?)').bind(title).run();
-			return new Response(JSON.stringify({ message: 'Resume saved' }), { status: 201 });
-		}
+		try {
+			// POST /api/resumes
+			if (url.pathname === '/api/resumes' && request.method === 'POST') {
+				const data = await request.formData();
+				const title = data.get('title');
 
-		// GET /api/resumes/:userId
-		const resumesMatch = url.pathname.match(/^\/api\/resumes\/([^/]+)$/);
-		if (resumesMatch && request.method === 'GET') {
-			const userId = resumesMatch[1];
-			// Example: Fetch from D1
-			// const { results } = await env.DB.prepare('SELECT * FROM resumes WHERE user_id = ?').bind(userId).all();
-			return new Response(JSON.stringify({ message: `Resumes for user ${userId}` }), { status: 200 });
-		}
+				if (!title || typeof title !== 'string') {
+					return new Response(JSON.stringify({ error: "Missing or invalid 'title' field" }), {
+						status: 400,
+						headers: { 'Content-Type': 'application/json' },
+					});
+				}
 
-		// Default: Not Found
-		return new Response('Not Found', { status: 404 });
+				// Example DB insert — adjust your table/columns accordingly
+				await env.DB.prepare('INSERT INTO resumes (title) VALUES (?)').bind(title).run();
+
+				return new Response(JSON.stringify({ message: 'Resume saved' }), {
+					status: 201,
+					headers: { 'Content-Type': 'application/json' },
+				});
+			}
+
+			// GET /api/resumes/:userId
+			const resumesMatch = url.pathname.match(/^\/api\/resumes\/([^/]+)$/);
+			if (resumesMatch && request.method === 'GET') {
+				const userId = resumesMatch[1];
+
+				// Example DB query — adjust query to fetch resumes by userId
+				const result = await env.DB.prepare('SELECT * FROM resumes WHERE user_id = ?').bind(userId).all();
+
+				return new Response(JSON.stringify({ resumes: result.results }), {
+					status: 200,
+					headers: { 'Content-Type': 'application/json' },
+				});
+			}
+
+			// Not Found
+			return new Response(JSON.stringify({ error: 'Not Found' }), {
+				status: 404,
+				headers: { 'Content-Type': 'application/json' },
+			});
+		} catch (error) {
+			console.error('Worker error:', error);
+			return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' },
+			});
+		}
 	},
 } satisfies ExportedHandler<Env>;

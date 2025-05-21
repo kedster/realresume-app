@@ -1,9 +1,7 @@
+const API_BASE_URL = 'https://realresume-app.sethkeddy.workers.dev';
 
-
-// This file contains functions to interact with the backend API for user authentication and resume management.
-// It includes functions for logging in, saving resumes, fetching resumes, and deleting resumes.
 export async function loginUser(username, password) {
-  const response = await fetch('https://realresume-app.sethkeddy.workers.dev/api/auth/login', {
+  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
@@ -20,59 +18,44 @@ export async function loginUser(username, password) {
   return data;
 }
 
-export async function saveResume(resumeData) {
+export async function saveResume(resumeData: Record<string, any>) {
   const token = localStorage.getItem('authToken');
 
-  const response = await fetch('https://realresume-app.sethkeddy.workers.dev', {
+  const response = await fetch('https://realresume-app.sethkeddy.workers.dev/api/resumes', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(resumeData),
+    body: resumeData,
   });
 
   if (!response.ok) {
     throw new Error('Failed to save resume');
   }
 
-  const data = await response.json();
-  return data;
+  return await response.json();
 }
 
-export async function getResumes() {
+export async function getResumes(userId: string) {
   const token = localStorage.getItem('authToken');
 
-  const response = await fetch('https://realresume-app.sethkeddy.workers.dev', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+  const response = await fetch(`${API_BASE_URL}/api/resumes/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   if (!response.ok) {
     throw new Error('Failed to fetch resumes');
   }
 
-  const data = await response.json();
-  return data;
+  return await response.json();
 }
 
-export async function deleteResume(resumeId) {
+export async function deleteResume(resumeId: string) {
   const token = localStorage.getItem('authToken');
 
-  const response = await fetch(`https://realresume-app.sethkeddy.workers.dev/${resumeId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/resumes/${resumeId}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   if (!response.ok) {
     throw new Error('Failed to delete resume');
   }
-
-  return;
 }
