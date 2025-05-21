@@ -23,19 +23,34 @@ const SeekerPage = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('file', file);
-    // Optionally, if you have user_id and status:
-    // formData.append('user_id', userId); // Uncomment and define userId if available
-    formData.append('status', 'active'); // or whatever default you want
+    // Read file as base64
+    const toBase64 = (file: File) =>
+      new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = error => reject(error);
+      });
 
+    const file_blob = await toBase64(file);
+
+    // Now submit the resume data with file_blob
     const response = await fetch('https://realresume-app.sethkeddy.workers.dev/api/resumes', {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: formData,
+      body: JSON.stringify({
+        user_id: '123', // Replace with actual user ID
+        title,
+        file_blob, // base64 string
+        status: 'active',
+        name,
+        email,
+        location_type: locationType,
+        location: locationType === 'location' ? location : null,
+      }),
     });
 
     if (response.ok) {

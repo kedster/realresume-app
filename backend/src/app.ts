@@ -55,17 +55,19 @@ app.post('/api/auth/google', async (req, res) => {
 });
 
 // Save Resume Handler
-app.post('/api/resumes', upload.single('file'), (req: Request, res: Response) => {
-  const { title } = req.body;
-  const file = req.file;
+app.post('/api/resumes', (req: Request, res: Response) => {
+  const { title, user_id = 'demo-user', status = 'active', file_url = null } = req.body;
 
-  // TODO: Save to your database: title, file.path or file.filename as file_url, etc.
+  if (!title) {
+    return res.status(400).json({ error: 'Missing title' });
+  }
+
   const resume = {
     id: (resumes.length + 1).toString(),
-    user_id: 'user-id', // Replace with real user ID if available
+    user_id,
     title,
-    file_url: file ? `/uploads/${file.filename}` : null,
-    status: 'active',
+    file_url,
+    status,
     uploaded_at: new Date(),
   };
   resumes.push(resume);
@@ -75,9 +77,18 @@ app.post('/api/resumes', upload.single('file'), (req: Request, res: Response) =>
 // Get User Resumes Handler
 app.get('/api/resumes/:userId', (req, res) => {
   const { userId } = req.params;
-
-  const userResumes = resumes.filter(r => r.userId === userId);
+  const userResumes = resumes.filter(r => r.user_id === userId);
   res.json(userResumes);
+});
+
+// File Upload Handler
+app.post('/api/upload', upload.single('file'), (req: Request, res: Response) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  // You can return the file URL or filename as needed
+  const fileUrl = `/uploads/${req.file.filename}`;
+  res.status(201).json({ fileUrl });
 });
 
 export default app;
