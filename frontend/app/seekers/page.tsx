@@ -26,12 +26,15 @@ const SeekerPage = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('file', file);
-    // You can add more fields if needed, e.g.:
-    // formData.append('user_id', userId);
-    // formData.append('status', 'active');
+    // Optionally, if you have user_id and status:
+    // formData.append('user_id', userId); // Uncomment and define userId if available
+    formData.append('status', 'active'); // or whatever default you want
 
     const response = await fetch('https://realresume-app.sethkeddy.workers.dev/api/resumes', {
       method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+      },
       body: formData,
     });
 
