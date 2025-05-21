@@ -16,6 +16,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/seekers/layout.js"
     ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
     "/recruiters/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -45,11 +50,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/techs/page.js"
-    ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
     ]
   }
 }

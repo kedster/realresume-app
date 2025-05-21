@@ -1,4 +1,4 @@
-// File: C:\Projects\realresume-app\app\recruiters\page.tsx
+// File: C:\Projects\realresume-app\frontend\app\recruiters\page.tsx
 import * as entry from '../../../../app/recruiters/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

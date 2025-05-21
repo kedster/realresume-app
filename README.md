@@ -179,12 +179,12 @@ Cloudflare Pages
 
 **Goal:** Implement basic authentication and role management to distinguish job seekers, recruiters, admins, and tech users.
 
-- [ ] Define user roles and permissions.
-- [ ] Choose authentication method (JWT, OAuth, or third-party like Auth0).
-- [ ] Implement signup/login flow for job seekers (upload-only).
-- [ ] Implement recruiter login with search access.
-- [ ] Implement admin and tech logins with expanded privileges.
-- [ ] Add role-based route protection in Next.js.
+- [X ] Define user roles and permissions.
+- [X ] Choose authentication method (JWT, OAuth, or third-party like Auth0).
+- [X ] Implement signup/login flow for job seekers (upload-only).
+- [X ] Implement recruiter login with search access.
+- [X ] Implement admin and tech logins with expanded privileges.
+- [X ] Add role-based route protection in Next.js.
 
 ---
 
@@ -192,7 +192,7 @@ Cloudflare Pages
 
 **Goal:** Allow job seekers to upload resumes (Word/PDF), store securely, and extract text for search.
 
-- [ ] Create file upload component for seekers.
+- [ X] Create file upload component for seekers.
 - [ ] Validate file types and size client-side.
 - [ ] Implement server-side malicious file scanning integration.
 - [ ] Store files securely (consider cloud storage like AWS S3).
@@ -205,7 +205,7 @@ Cloudflare Pages
 
 **Goal:** Build recruiter search functionality and display results.
 
-- [ ] Develop search UI with filters for keywords, technologies, etc.
+- [X ] Develop search UI with filters for keywords, technologies, etc.
 - [ ] Implement backend search API querying the indexed text database.
 - [ ] Display results with resume summaries (no direct upload or edit).
 - [ ] Add pagination and sorting features for usability.
@@ -228,9 +228,9 @@ Cloudflare Pages
 
 **Goal:** Provide admin and tech roles tools to manage blacklisted resumes, emails, and phone numbers.
 
-- [ ] Design blacklist data model in the database.
-- [ ] Build admin interface to view all resumes, flagged users, and blacklist entries.
-- [ ] Allow tech users to manually block or release resumes and blacklist email/phone numbers.
+- [X ] Design blacklist data model in the database.
+- [X ] Build admin interface to view all resumes, flagged users, and blacklist entries.
+- [X ] Allow tech users to manually block or release resumes and blacklist email/phone numbers.
 - [ ] Enforce blacklist rules during resume upload and user login.
 
 ---

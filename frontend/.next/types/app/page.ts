@@ -1,4 +1,4 @@
-// File: C:\Projects\realresume-app\app\page.tsx
+// File: C:\Projects\realresume-app\frontend\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
