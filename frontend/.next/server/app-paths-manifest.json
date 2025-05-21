@@ -1,7 +1,3 @@
 {
-  "/page": "app/page.js",
-  "/recruiters/page": "app/recruiters/page.js",
-  "/seekers/page": "app/seekers/page.js",
-  "/admins/page": "app/admins/page.js",
-  "/techs/page": "app/techs/page.js"
+  "/seekers/page": "app/seekers/page.js"
 }

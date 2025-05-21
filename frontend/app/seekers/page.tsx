@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 const SeekerPage = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [locationType, setLocationType] = useState('remote');
@@ -15,10 +16,30 @@ const SeekerPage = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Handle form submission (e.g., send to API)
-    alert('Form submitted!');
+    if (!file) {
+      alert('Please upload a file.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('file', file);
+    // You can add more fields if needed, e.g.:
+    // formData.append('user_id', userId);
+    // formData.append('status', 'active');
+
+    const response = await fetch('http://localhost:8787/api/resumes', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      alert('Resume submitted!');
+    } else {
+      alert('Failed to submit resume.');
+    }
   };
 
   return (
@@ -32,6 +53,16 @@ const SeekerPage = () => {
             accept=".pdf,.doc,.docx"
             onChange={handleFileChange}
             className="block w-full"
+            required
+          />
+        </div>
+        <div>
+          <label className="block font-medium mb-1">Resume Title</label>
+          <input
+            type="text"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            className="w-full border rounded px-2 py-1"
             required
           />
         </div>
