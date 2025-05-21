@@ -11,6 +11,13 @@
 		"nodejs_compat",
 		"global_fetch_strictly_public"
 	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "realresume-app",
+			"database_id": "fb457aa0-843f-4337-83ce-851e17c87d6a"
+		}
+	],
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./public"

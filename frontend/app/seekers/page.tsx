@@ -30,7 +30,7 @@ const SeekerPage = () => {
     // formData.append('user_id', userId);
     // formData.append('status', 'active');
 
-    const response = await fetch('http://localhost:8787/api/resumes', {
+    const response = await fetch('https://realresume-app.sethkeddy.workers.dev', {
       method: 'POST',
       body: formData,
     });

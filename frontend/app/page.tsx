@@ -17,7 +17,7 @@ const HomePage = () => {
       console.log('Google credential:', response.credential);
 
       // Send JWT to your backend for verification and login
-      const res = await fetch('http://localhost:8787/api/auth/google', {
+      const res = await fetch('https://realresume-app.sethkeddy.workers.dev/api/auth/google', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: response.credential }),

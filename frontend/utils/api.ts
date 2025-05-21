@@ -3,7 +3,7 @@
 // This file contains functions to interact with the backend API for user authentication and resume management.
 // It includes functions for logging in, saving resumes, fetching resumes, and deleting resumes.
 export async function loginUser(username, password) {
-  const response = await fetch('http://localhost:8787/api/auth/login', {
+  const response = await fetch('https://realresume-app.sethkeddy.workers.dev/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
@@ -23,7 +23,7 @@ export async function loginUser(username, password) {
 export async function saveResume(resumeData) {
   const token = localStorage.getItem('authToken');
 
-  const response = await fetch('http://localhost:8787/api/resumes', {
+  const response = await fetch('https://realresume-app.sethkeddy.workers.dev', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export async function saveResume(resumeData) {
 export async function getResumes() {
   const token = localStorage.getItem('authToken');
 
-  const response = await fetch('http://localhost:8787/api/resumes', {
+  const response = await fetch('https://realresume-app.sethkeddy.workers.dev', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export async function getResumes() {
 export async function deleteResume(resumeId) {
   const token = localStorage.getItem('authToken');
 
-  const response = await fetch(`http://localhost:8787/api/resumes/${resumeId}`, {
+  const response = await fetch(`https://realresume-app.sethkeddy.workers.dev/${resumeId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

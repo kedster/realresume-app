@@ -60,15 +60,16 @@ app.post('/api/resumes', upload.single('file'), (req: Request, res: Response) =>
   const file = req.file;
 
   // TODO: Save to your database: title, file.path or file.filename as file_url, etc.
-  // Example response:
-  res.status(201).json({
-    id: 'generated-id',
-    user_id: 'user-id', // You may want to get this from auth/session
+  const resume = {
+    id: (resumes.length + 1).toString(),
+    user_id: 'user-id', // Replace with real user ID if available
     title,
     file_url: file ? `/uploads/${file.filename}` : null,
     status: 'active',
     uploaded_at: new Date(),
-  });
+  };
+  resumes.push(resume);
+  res.status(201).json(resume);
 });
 
 // Get User Resumes Handler
