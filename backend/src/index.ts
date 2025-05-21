@@ -13,23 +13,23 @@
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext) {
-		const url = new URL(request.url);
-
 		try {
+			const url = new URL(request.url);
+
 			// POST /api/resumes
 			if (url.pathname === '/api/resumes' && request.method === 'POST') {
 				const data = await request.formData();
 				const title = data.get('title');
 
-				if (!title || typeof title !== 'string') {
-					return new Response(JSON.stringify({ error: "Missing or invalid 'title' field" }), {
+				// Basic validation example
+				if (!title) {
+					return new Response(JSON.stringify({ error: 'Missing title' }), {
 						status: 400,
 						headers: { 'Content-Type': 'application/json' },
 					});
 				}
 
-				// Example DB insert — adjust your table/columns accordingly
-				await env.DB.prepare('INSERT INTO resumes (title) VALUES (?)').bind(title).run();
+				// TODO: Save to D1 or handle file upload as needed
 
 				return new Response(JSON.stringify({ message: 'Resume saved' }), {
 					status: 201,
@@ -41,11 +41,8 @@ export default {
 			const resumesMatch = url.pathname.match(/^\/api\/resumes\/([^/]+)$/);
 			if (resumesMatch && request.method === 'GET') {
 				const userId = resumesMatch[1];
-
-				// Example DB query — adjust query to fetch resumes by userId
-				const result = await env.DB.prepare('SELECT * FROM resumes WHERE user_id = ?').bind(userId).all();
-
-				return new Response(JSON.stringify({ resumes: result.results }), {
+				// TODO: Fetch resumes for userId from D1
+				return new Response(JSON.stringify({ message: `Resumes for user ${userId}` }), {
 					status: 200,
 					headers: { 'Content-Type': 'application/json' },
 				});
@@ -56,8 +53,10 @@ export default {
 				status: 404,
 				headers: { 'Content-Type': 'application/json' },
 			});
-		} catch (error) {
-			console.error('Worker error:', error);
+		} catch (err) {
+			// Log the error to Cloudflare's console
+			console.error('Worker error:', err);
+
 			return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
 				status: 500,
 				headers: { 'Content-Type': 'application/json' },

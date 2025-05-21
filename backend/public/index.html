@@ -1,31 +1,114 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Hello, World!</title>
-	</head>
-	<body>
-		<h1 id="heading"></h1>
-		<button id="button" type="button">Fetch a random UUID</button>
-		<output id="random" for="button"></output>
-		<script>
-			fetch('/message')
-				.then((resp) => resp.text())
-				.then((text) => {
-					const h1 = document.getElementById('heading');
-					h1.textContent = text;
-				});
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RealResume App Test Runner</title>
+  <style>
+    table { border-collapse: collapse; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 0.5em; }
+    .pass { color: green; }
+    .fail { color: red; }
+  </style>
+</head>
+<body>
+  <h1>RealResume App API Test Runner</h1>
+  <table id="test-results">
+    <thead>
+      <tr>
+        <th>Test</th>
+        <th>Status</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    async function runTests() {
+      const results = [];
+      // 1. Test /message
+      try {
+        const resp = await fetch('/message');
+        const text = await resp.text();
+        results.push(['GET /message', resp.ok, text]);
+      } catch (e) {
+        results.push(['GET /message', false, e.toString()]);
+      }
 
-			const button = document.getElementById("button");
-			button.addEventListener("click", () => {
-				fetch('/random')
-					.then((resp) => resp.text())
-					.then((text) => {
-						const random = document.getElementById('random');
-						random.textContent = text;
-					});
-			});
-		</script>
-	</body>
+      // 2. Test /random
+      try {
+        const resp = await fetch('/random');
+        const text = await resp.text();
+        results.push(['GET /random', resp.ok, text]);
+      } catch (e) {
+        results.push(['GET /random', false, e.toString()]);
+      }
+
+      // 3. Test /api/auth/login
+      try {
+        const resp = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: 'user1', password: 'pass123' })
+        });
+        const json = await resp.json();
+        results.push(['POST /api/auth/login', resp.ok, JSON.stringify(json)]);
+      } catch (e) {
+        results.push(['POST /api/auth/login', false, e.toString()]);
+      }
+
+      // 4. Test /api/auth/google
+      try {
+        const resp = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: 'fake-google-token' })
+        });
+        const json = await resp.json();
+        results.push(['POST /api/auth/google', resp.ok, JSON.stringify(json)]);
+      } catch (e) {
+        results.push(['POST /api/auth/google', false, e.toString()]);
+      }
+
+      // 5. Test /api/resumes POST (dummy FormData)
+      try {
+        const formData = new FormData();
+        formData.append('title', 'Test Resume');
+        // Skipping file upload for simplicity
+        const resp = await fetch('/api/resumes', {
+          method: 'POST',
+          body: formData
+        });
+        const json = await resp.json();
+        results.push(['POST /api/resumes', resp.ok, JSON.stringify(json)]);
+      } catch (e) {
+        results.push(['POST /api/resumes', false, e.toString()]);
+      }
+
+      // 6. Test /api/resumes/:userId GET
+      try {
+        const userId = '1'; // demo user
+        const resp = await fetch(`/api/resumes/${userId}`);
+        const json = await resp.json();
+        results.push([`GET /api/resumes/${userId}`, resp.ok, JSON.stringify(json)]);
+      } catch (e) {
+        results.push([`GET /api/resumes/1`, false, e.toString()]);
+      }
+
+      // Display results
+      const tbody = document.querySelector('#test-results tbody');
+      results.forEach(([name, ok, details]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${name}</td>
+          <td class="${ok ? 'pass' : 'fail'}">${ok ? 'PASS' : 'FAIL'}</td>
+          <td><pre>${details}</pre></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    runTests();
+  </script>
+</body>
 </html>
