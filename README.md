@@ -167,11 +167,11 @@ Cloudflare Pages
 
 **Goal:** Establish the project structure, version control, and core tools.
 
-- [ ] Initialize GitHub repo (`realresume-app`).
-- [ ] Scaffold bare minimum Next.js + TypeScript app.
-- [ ] Create essential files (`package.json`, `tsconfig.json`, `.gitignore`, `pages/index.tsx`).
-- [ ] Write README with project overview and instructions.
-- [ ] Set up basic Git workflow and branch strategy (e.g., `main`, `dev`, feature branches).
+- [X] Initialize GitHub repo (`realresume-app`).
+- [X] Scaffold bare minimum Next.js + TypeScript app.
+- [X] Create essential files (`package.json`, `tsconfig.json`, `.gitignore`, `pages/index.tsx`).
+- [X] Write README with project overview and instructions.
+- [X] Set up basic Git workflow and branch strategy (e.g., `main`, `dev`, feature branches).
 
 ---
 
